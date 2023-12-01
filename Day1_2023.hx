@@ -38,7 +38,7 @@ class Day1_2023 {
             for (j in 0...i.length) {
                 if (i.charAt(j).isDigits() == true) mp[j] = i.charAt(j);
             }
-            for (ind => val in names.keyValueIterator()) {
+            for (ind => val in names) {
                 mp[i.indexOf(val)] = string(ind+1);
                 mp[i.lastIndexOf(val)] = string(ind+1); 
             }
