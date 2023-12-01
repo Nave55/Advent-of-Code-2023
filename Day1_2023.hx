@@ -1,12 +1,8 @@
 import StringTools.*;
 import Std.*;
-import Math.*;
-import haxe.macro.*;
-import haxe.ds.*;
 import Tools;
 
 using hx.strings.Strings;
-using Lambda;
 
 class Day1_2023 {
     static function main() {
