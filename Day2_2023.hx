@@ -28,10 +28,10 @@ class Day2_2023 {
 
     static function solution(data: AAAS) { 
         var ttl = 0, ttl2 = 0;
-        for (i => v in data) {
+        for (base_ind => base_val in data) {
             var sizes = ["green" => 1, "blue"=> 1, "red"=> 1];
             var tmp = 0;
-            for (j in v) {
+            for (j in base_val) {
                 var mp = ["green" => 0, "blue"=> 0, "red"=> 0];
                 for (ind => val in j) {
                     if (ind & 1 == 1) mp[val] += parseInt(j[ind-1]);
@@ -41,7 +41,7 @@ class Day2_2023 {
                 sizes['red'] = int(max(sizes['red'], mp['red']));
                 sizes['blue'] = int(max(sizes['blue'], mp['blue'])); 
             }
-            if (tmp == 0) ttl += i+1;
+            if (tmp == 0) ttl += base_ind+1;
             ttl2 += (sizes['green'] * sizes['red'] * sizes['blue']);
         }
         trace('\nPart 1: $ttl\nPart 2: $ttl2');
