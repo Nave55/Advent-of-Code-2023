@@ -43,9 +43,7 @@ solution :: proc(filepath: string) {
             }
             if ! unicode.is_digit(rune(arr[i][j])) && len(str) > 0 || j == len(arr) - 1 && len(str) > 0 {
                 tmp := utf8.runes_to_string(str[:])
-                a : [dynamic]int
-                for i in tmp_pos do append(&a, i)
-                append(&num_dir, Directory{num = strconv.atoi(tmp), x = j-1, y = i, r = a[:]})
+                append(&num_dir, Directory{num = strconv.atoi(tmp), x = j-1, y = i, r = slice.clone(tmp_pos[:])})
                 clear(&str)
                 clear(&tmp_pos)
             }
@@ -82,5 +80,5 @@ solution :: proc(filepath: string) {
 
     sum2 := 0
     for i in gears do sum2 += math.prod(i[:])
-    fmt.printf("Part 1: %v\nPart 2: %v", sum, sum2) 
+    fmt.printf("Part 1: %v\nPart 2: %v", sum, sum2)
 }
