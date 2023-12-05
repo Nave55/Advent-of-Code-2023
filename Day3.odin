@@ -51,19 +51,6 @@ solution :: proc(filepath: string) {
     }
 
     arr_nums : [dynamic]Directory
-    for i in num_dir {
-        for k in arr_dir {
-            if slice.contains(i.r,k.x+1) && i.y == k.y || slice.contains(i.r,k.x-1) && i.y == k.y || 
-            slice.contains(i.r,k.x) && i.y == k.y+1 || slice.contains(i.r,k.x+1) && i.y == k.y+1 ||
-            slice.contains(i.r,k.x-1) && i.y == k.y+1 || slice.contains(i.r,k.x) && i.y == k.y-1 ||
-            slice.contains(i.r,k.x+1) && i.y == k.y-1 || slice.contains(i.r,k.x-1) && i.y == k.y-1 {
-                append(&arr_nums, Directory{num = i.num, x = i.x, y = i.y})
-            }
-        }
-    }
-    sum := 0
-    for i in arr_nums do sum += i.num
-
     gears : [dynamic]int
     for k in arr_dir {
         tmp : [dynamic]int
@@ -72,13 +59,14 @@ solution :: proc(filepath: string) {
             slice.contains(i.r,k.x) && i.y == k.y+1 || slice.contains(i.r,k.x+1) && i.y == k.y+1 ||
             slice.contains(i.r,k.x-1) && i.y == k.y+1 || slice.contains(i.r,k.x) && i.y == k.y-1 ||
             slice.contains(i.r,k.x+1) && i.y == k.y-1 || slice.contains(i.r,k.x-1) && i.y == k.y-1 {
+                append(&arr_nums, Directory{num = i.num, x = i.x, y = i.y})
                 append(&tmp,i.num)
             }
         }   
         if len(tmp) == 2 do append(&gears, math.prod(tmp[:]))
     }
-
-    sum2 := 0
+    sum, sum2 := 0, 0
+    for i in arr_nums do sum += i.num
     for i in gears do sum2 += i
     fmt.printf("Part 1: %v\nPart 2: %v", sum, sum2)
 }
