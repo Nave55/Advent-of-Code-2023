@@ -64,7 +64,7 @@ solution :: proc(filepath: string) {
     sum := 0
     for i in arr_nums do sum += i.num
 
-    gears : [dynamic][dynamic]int
+    gears : [dynamic]int
     for k in arr_dir {
         tmp : [dynamic]int
         for i in num_dir {
@@ -75,10 +75,10 @@ solution :: proc(filepath: string) {
                 append(&tmp,i.num)
             }
         }   
-        if len(tmp) == 2 do append(&gears, tmp)
+        if len(tmp) == 2 do append(&gears, math.prod(tmp[:]))
     }
 
     sum2 := 0
-    for i in gears do sum2 += math.prod(i[:])
+    for i in gears do sum2 += i
     fmt.printf("Part 1: %v\nPart 2: %v", sum, sum2)
 }
