@@ -57,7 +57,7 @@ solution :: proc(filepath: string) {
     defer delete(arr_nums); defer delete(gears)
 
     for i in arr_dir {
-        tmp : [dynamic]int; defer delete(tmp);
+        tmp : [dynamic]int
         for j in num_dir {
             if slice.contains(j.rng,i.x) && (j.y == i.y+1 || j.y == i.y-1) ||
             slice.contains(j.rng,i.x+1) && (j.y == i.y || j.y == i.y-1 || j.y == i.y+1) ||
