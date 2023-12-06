@@ -18,17 +18,17 @@ solution :: proc(filepath: string) {
     if !ok do return 
     defer delete(data, context.allocator)  
 
-    it := string(data)
     arr : [dynamic]string
-    arr_dir, num_dir : [dynamic]Directory
+    it := string(data)
+    for line in strings.split_lines_iterator(&it) do append(&arr,line)
+
     Directory :: struct {
         num : int,
         x : int,
         y : int,
-        r : []int
+        rng : []int
     }
-    
-    for line in strings.split_lines_iterator(&it) do append(&arr,line)
+    arr_dir, num_dir : [dynamic]Directory
     
     for i in 0..<len(arr) {
         str : [dynamic]rune
@@ -43,7 +43,7 @@ solution :: proc(filepath: string) {
             }
             if ! unicode.is_digit(rune(arr[i][j])) && len(str) > 0 || j == len(arr) - 1 && len(str) > 0 {
                 tmp := utf8.runes_to_string(str[:])
-                append(&num_dir, Directory{num = strconv.atoi(tmp), x = j-1, y = i, r = slice.clone(tmp_pos[:])})
+                append(&num_dir, Directory{num = strconv.atoi(tmp), x = j-1, y = i, rng = slice.clone(tmp_pos[:])})
                 clear(&str)
                 clear(&tmp_pos)
             }
@@ -52,15 +52,14 @@ solution :: proc(filepath: string) {
 
     arr_nums : [dynamic]Directory
     gears : [dynamic]int
-    for k in arr_dir {
+    for i in arr_dir {
         tmp : [dynamic]int
-        for i in num_dir {
-            if slice.contains(i.r,k.x+1) && i.y == k.y || slice.contains(i.r,k.x-1) && i.y == k.y || 
-            slice.contains(i.r,k.x) && i.y == k.y+1 || slice.contains(i.r,k.x+1) && i.y == k.y+1 ||
-            slice.contains(i.r,k.x-1) && i.y == k.y+1 || slice.contains(i.r,k.x) && i.y == k.y-1 ||
-            slice.contains(i.r,k.x+1) && i.y == k.y-1 || slice.contains(i.r,k.x-1) && i.y == k.y-1 {
-                append(&arr_nums, Directory{num = i.num, x = i.x, y = i.y})
-                append(&tmp,i.num)
+        for j in num_dir {
+            if slice.contains(j.rng,i.x) && (j.y == i.y+1 || j.y == i.y-1) ||
+            slice.contains(j.rng,i.x+1) && (j.y == i.y || j.y == i.y-1 || j.y == i.y+1) ||
+            slice.contains(j.rng,i.x-1) && (j.y == i.y+1 || j.y == i.y || j.y == i.y-1) {
+                append(&arr_nums, Directory{num = j.num, x = j.x, y = j.y})
+                append(&tmp,j.num)
             }
         }   
         if len(tmp) == 2 do append(&gears, math.prod(tmp[:]))
