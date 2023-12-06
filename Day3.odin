@@ -28,7 +28,9 @@ solution :: proc(filepath: string) {
         y : int,
         rng : []int
     }
+
     arr_dir, num_dir : [dynamic]Directory
+    defer delete(arr); defer delete(arr_dir); defer delete(num_dir)
     
     for i in 0..<len(arr) {
         str : [dynamic]rune
@@ -41,7 +43,7 @@ solution :: proc(filepath: string) {
                 append(&str,rune(arr[i][j]))
                 append(&tmp_pos, j)
             }
-            if ! unicode.is_digit(rune(arr[i][j])) && len(str) > 0 || j == len(arr) - 1 && len(str) > 0 {
+            if (! unicode.is_digit(rune(arr[i][j])) || j == len(arr) - 1 ) && len(str) > 0 {
                 tmp := utf8.runes_to_string(str[:])
                 append(&num_dir, Directory{num = strconv.atoi(tmp), x = j-1, y = i, rng = slice.clone(tmp_pos[:])})
                 clear(&str)
@@ -52,8 +54,10 @@ solution :: proc(filepath: string) {
 
     arr_nums : [dynamic]Directory
     gears : [dynamic]int
+    defer delete(arr_nums); defer delete(gears)
+
     for i in arr_dir {
-        tmp : [dynamic]int
+        tmp : [dynamic]int; defer delete(tmp);
         for j in num_dir {
             if slice.contains(j.rng,i.x) && (j.y == i.y+1 || j.y == i.y-1) ||
             slice.contains(j.rng,i.x+1) && (j.y == i.y || j.y == i.y-1 || j.y == i.y+1) ||
