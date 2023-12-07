@@ -46,30 +46,24 @@ solution :: proc(filepath: string) {
             if (! unicode.is_digit(rune(arr[i][j])) || j == len(arr) - 1 ) && len(str) > 0 {
                 tmp := utf8.runes_to_string(str[:])
                 append(&num_dir, Directory{num = strconv.atoi(tmp), x = j-1, y = i, rng = slice.clone(tmp_pos[:])})
-                clear(&str)
-                clear(&tmp_pos)
+                clear(&str); clear(&tmp_pos)
             }
         }
     }
 
-    arr_nums : [dynamic]Directory
-    gears : [dynamic]int
-    defer delete(arr_nums); defer delete(gears)
-
+    pt1, pt2 := 0, 0
     for i in arr_dir {
         tmp : [dynamic]int
         for j in num_dir {
             if slice.contains(j.rng,i.x) && (j.y == i.y+1 || j.y == i.y-1) ||
             slice.contains(j.rng,i.x+1) && (j.y == i.y || j.y == i.y-1 || j.y == i.y+1) ||
             slice.contains(j.rng,i.x-1) && (j.y == i.y+1 || j.y == i.y || j.y == i.y-1) {
-                append(&arr_nums, Directory{num = j.num, x = j.x, y = j.y})
+                pt1 += j.num
                 append(&tmp,j.num)
             }
         }   
-        if len(tmp) == 2 do append(&gears, math.prod(tmp[:]))
+        if len(tmp) == 2 do pt2 += math.prod(tmp[:])
     }
-    sum, sum2 := 0, 0
-    for i in arr_nums do sum += i.num
-    for i in gears do sum2 += i
-    fmt.printf("Part 1: %v\nPart 2: %v", sum, sum2)
+
+    fmt.printf("Part 1: %v\nPart 2: %v", pt1, pt2)
 }
