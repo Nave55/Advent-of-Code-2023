@@ -29,30 +29,30 @@ solution :: proc(filepath: string) {
         rng : []int
     }
 
-    arr_dir, num_dir : [dynamic]Directory
-    defer delete(arr); defer delete(arr_dir); defer delete(num_dir)
+    sym_dir, num_dir : [dynamic]Directory
+    defer delete(arr); defer delete(sym_dir); defer delete(num_dir)
     
     for i in 0..<len(arr) {
-        str : [dynamic]rune
-        tmp_pos : [dynamic]int
+        tmp_num : [dynamic]rune
+        tmp_rng : [dynamic]int
         for j in 0..<len(arr) {
             if rune(arr[i][j]) != '.' && ! unicode.is_digit(rune(arr[i][j])) {
-                append(&arr_dir, Directory{x = j, y = i})
+                append(&sym_dir, Directory{x = j, y = i})
             } 
             if unicode.is_digit(rune(arr[i][j])) {
-                append(&str,rune(arr[i][j]))
-                append(&tmp_pos, j)
+                append(&tmp_num,rune(arr[i][j]))
+                append(&tmp_rng, j)
             }
-            if (! unicode.is_digit(rune(arr[i][j])) || j == len(arr) - 1 ) && len(str) > 0 {
-                tmp := utf8.runes_to_string(str[:])
-                append(&num_dir, Directory{num = strconv.atoi(tmp), x = j-1, y = i, rng = slice.clone(tmp_pos[:])})
-                clear(&str); clear(&tmp_pos)
+            if (! unicode.is_digit(rune(arr[i][j])) || j == len(arr) - 1 ) && len(tmp_num) > 0 {
+                tmp := utf8.runes_to_string(tmp_num[:])
+                append(&num_dir, Directory{num = strconv.atoi(tmp), x = j-1, y = i, rng = slice.clone(tmp_rng[:])})
+                clear(&tmp_num); clear(&tmp_rng)
             }
         }
     }
 
     pt1, pt2 := 0, 0
-    for i in arr_dir {
+    for i in sym_dir {
         tmp : [dynamic]int
         for j in num_dir {
             if slice.contains(j.rng,i.x) && (j.y == i.y+1 || j.y == i.y-1) ||
